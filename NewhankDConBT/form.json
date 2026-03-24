@@ -52,6 +52,16 @@
           "type": "Button",
           "caption": "Disconnect",
           "onClick": "NHDBT_DisconnectClient($id);"
+        },
+        {
+          "type": "Button",
+          "caption": "Auto-Connect AN",
+          "onClick": "NHDBT_SetAutoConnect($id, true);"
+        },
+        {
+          "type": "Button",
+          "caption": "Auto-Connect AUS",
+          "onClick": "NHDBT_SetAutoConnect($id, false);"
         }
       ]
     },

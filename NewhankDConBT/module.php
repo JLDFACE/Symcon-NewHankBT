@@ -97,6 +97,9 @@ class NewhankDConBT extends IPSModule
         $this->RegisterVariableBoolean('LEDEnabled', 'LED aktiv', '~Switch', 70);
         $this->EnableAction('LEDEnabled');
 
+        $this->RegisterVariableBoolean('AutoConnect', 'Auto-Connect', '~Switch', 75);
+        $this->EnableAction('AutoConnect');
+
         // Action button – disables pairing mode (no explicit disconnect command in API)
         $this->RegisterVariableInteger('Disconnect', 'Trennen', $this->GetProfileName('Action'), 80);
         $this->EnableAction('Disconnect');
@@ -217,6 +220,11 @@ class NewhankDConBT extends IPSModule
         $this->SendUDP(self::OP_SET, self::CMD_LED, $Enabled ? '1' : '0');
     }
 
+    public function SetAutoConnect(bool $Enabled): void
+    {
+        $this->SendUDP(self::OP_SET, self::CMD_AUTOCONNECT, $Enabled ? '1' : '0');
+    }
+
     // ═══════════════════════════════════════════════════════════════
     //  REQUEST ACTION (UI interactions)
     // ═══════════════════════════════════════════════════════════════
@@ -241,6 +249,11 @@ class NewhankDConBT extends IPSModule
             case 'LEDEnabled':
                 $this->SetLED((bool)$Value);
                 $this->SetValueIfChanged('LEDEnabled', (bool)$Value);
+                break;
+
+            case 'AutoConnect':
+                $this->SetAutoConnect((bool)$Value);
+                $this->SetValueIfChanged('AutoConnect', (bool)$Value);
                 break;
 
             case 'Disconnect':
@@ -323,6 +336,10 @@ class NewhankDConBT extends IPSModule
 
             case 'BS': // Bluetooth SSID
                 $this->SetValueIfChanged('BluetoothName', $value);
+                break;
+
+            case 'CM': // Auto connect
+                $this->SetValueIfChanged('AutoConnect', $value === '1');
                 break;
         }
     }
