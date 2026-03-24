@@ -222,7 +222,8 @@ class NewhankDConBT extends IPSModule
 
     public function SetAutoConnect(bool $Enabled): void
     {
-        $this->SendUDP(self::OP_SET, self::CMD_AUTOCONNECT, $Enabled ? '1' : '0');
+        // CM controls "auto connect disable": CM 1 = disabled → AutoConnect OFF
+        $this->SendUDP(self::OP_SET, self::CMD_AUTOCONNECT, $Enabled ? '0' : '1');
     }
 
     // ═══════════════════════════════════════════════════════════════
@@ -338,8 +339,8 @@ class NewhankDConBT extends IPSModule
                 $this->SetValueIfChanged('BluetoothName', $value);
                 break;
 
-            case 'CM': // Auto connect
-                $this->SetValueIfChanged('AutoConnect', $value === '1');
+            case 'CM': // Auto connect disable: 1 = disabled → AutoConnect OFF
+                $this->SetValueIfChanged('AutoConnect', $value === '0');
                 break;
         }
     }
