@@ -81,6 +81,9 @@ class NewhankDConBT extends IPSModule
         $this->RegisterVariableInteger('Transport', 'Transport', $this->GetProfileName('Transport'), 10);
         $this->EnableAction('Transport');
 
+        $this->RegisterVariableInteger('Volume', 'Lautstärke', $this->GetProfileName('Volume'), 15);
+        $this->EnableAction('Volume');
+
         // Connection & Streaming Status
         $this->RegisterVariableBoolean('AudioActive', 'Audio aktiv', '~Switch', 20);
         $this->RegisterVariableBoolean('ClientPaired', 'Client verbunden', '~Switch', 30);
@@ -235,6 +238,14 @@ class NewhankDConBT extends IPSModule
         switch ($Ident) {
             case 'Transport':
                 $this->HandleTransportAction((int)$Value);
+                break;
+
+            case 'Volume':
+                if ((int)$Value === 0) {
+                    $this->SendUDP(self::OP_SET, self::CMD_VOL_UP);
+                } else {
+                    $this->SendUDP(self::OP_SET, self::CMD_VOL_DOWN);
+                }
                 break;
 
             case 'PairingMode':
@@ -455,6 +466,14 @@ class NewhankDConBT extends IPSModule
             IPS_SetVariableProfileAssociation($pTransport, 2, 'Zurück', 'HollowDoubleArrowLeft',  -1);
             IPS_SetVariableProfileAssociation($pTransport, 3, 'Weiter', 'HollowDoubleArrowRight', -1);
             IPS_SetVariableProfileIcon($pTransport, 'Speaker');
+        }
+
+        $pVolume = $this->GetProfileName('Volume');
+        if (!IPS_VariableProfileExists($pVolume)) {
+            IPS_CreateVariableProfile($pVolume, VARIABLETYPE_INTEGER);
+            IPS_SetVariableProfileAssociation($pVolume, 0, 'Lauter',  'HollowArrowUp',   -1);
+            IPS_SetVariableProfileAssociation($pVolume, 1, 'Leiser',  'HollowArrowDown', -1);
+            IPS_SetVariableProfileIcon($pVolume, 'Speaker');
         }
 
         $pAction = $this->GetProfileName('Action');
