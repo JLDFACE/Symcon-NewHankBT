@@ -1,0 +1,12 @@
+{
+  "id": "{E7F3A1B2-5C4D-4E6F-8A9B-1C2D3E4F5A6B}",
+  "author": "FACE GmbH",
+  "name": "Newhank DConBT",
+  "url": "https://github.com/JLDFACE/Symcon-NewHankBT",
+  "compatibility": {
+    "version": "7.0"
+  },
+  "version": "1.0",
+  "build": 1,
+  "date": 20260323
+}

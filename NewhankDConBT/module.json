@@ -1,0 +1,11 @@
+{
+  "id": "{A1B2C3D4-E5F6-7A8B-9C0D-E1F2A3B4C5D6}",
+  "name": "NewhankDConBT",
+  "type": 3,
+  "vendor": "Newhank",
+  "aliases": ["Newhank DConBT Bluetooth Dante Adapter"],
+  "parentRequirements": [],
+  "childRequirements": [],
+  "implemented": [],
+  "prefix": "NHDBT"
+}

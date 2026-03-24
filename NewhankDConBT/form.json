@@ -1,0 +1,78 @@
+{
+  "elements": [
+    {
+      "type": "ValidationTextBox",
+      "name": "Host",
+      "caption": "IP-Adresse",
+      "validate": "^(?:[0-9]{1,3}\\.){3}[0-9]{1,3}$"
+    },
+    {
+      "type": "NumberSpinner",
+      "name": "Port",
+      "caption": "UDP Port",
+      "minimum": 1,
+      "maximum": 65535
+    },
+    {
+      "type": "NumberSpinner",
+      "name": "DeviceNumber",
+      "caption": "Gerätenummer",
+      "minimum": 1,
+      "maximum": 99
+    },
+    {
+      "type": "NumberSpinner",
+      "name": "PollInterval",
+      "caption": "Abfrageintervall (Sekunden)",
+      "minimum": 5,
+      "maximum": 300,
+      "suffix": "s"
+    }
+  ],
+  "actions": [
+    {
+      "type": "RowLayout",
+      "items": [
+        {
+          "type": "Button",
+          "caption": "Poll",
+          "onClick": "NHDBT_Poll($id);"
+        },
+        {
+          "type": "Button",
+          "caption": "Play",
+          "onClick": "NHDBT_Play($id);"
+        },
+        {
+          "type": "Button",
+          "caption": "Pause",
+          "onClick": "NHDBT_Pause($id);"
+        },
+        {
+          "type": "Button",
+          "caption": "Disconnect",
+          "onClick": "NHDBT_DisconnectClient($id);"
+        }
+      ]
+    },
+    {
+      "type": "TestCenter",
+      "name": "RawCommand",
+      "caption": "Raw-Befehl senden",
+      "onClick": "echo NHDBT_SendRawCommand($id, $RawCommand);",
+      "items": [
+        {
+          "type": "ValidationTextBox",
+          "name": "RawCommand",
+          "caption": "Befehl (ohne \\r)"
+        }
+      ]
+    }
+  ],
+  "status": [
+    { "code": 102, "icon": "active",   "caption": "Aktiv" },
+    { "code": 104, "icon": "inactive", "caption": "Inaktiv" },
+    { "code": 200, "icon": "error",    "caption": "Keine IP-Adresse konfiguriert" },
+    { "code": 201, "icon": "error",    "caption": "Kommunikationsfehler" }
+  ]
+}
