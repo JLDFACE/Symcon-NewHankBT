@@ -46,6 +46,7 @@ Smartphone / Tablet
 
 | Variable | Typ | Beschreibung |
 |---|---|---|
+| Online | Boolean | Gerät antwortet auf den Poll (GET ALL) |
 | Transport | Integer | Play / Pause / Zurück / Weiter |
 | Audio aktiv | Boolean | Bluetooth-Audio wird gestreamt |
 | Client verbunden | Boolean | BT-Client ist verbunden |

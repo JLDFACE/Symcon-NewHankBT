@@ -66,23 +66,51 @@
       ]
     },
     {
-      "type": "TestCenter",
-      "name": "RawCommand",
+      "type": "ExpansionPanel",
       "caption": "Raw-Befehl senden",
-      "onClick": "echo NHDBT_SendRawCommand($id, $RawCommand);",
       "items": [
         {
-          "type": "ValidationTextBox",
-          "name": "RawCommand",
-          "caption": "Befehl (ohne \\r)"
+          "type": "RowLayout",
+          "items": [
+            {
+              "type": "ValidationTextBox",
+              "name": "RawCommand",
+              "caption": "Befehl (ohne \\r)",
+              "width": "420px"
+            },
+            {
+              "type": "Button",
+              "caption": "Senden",
+              "onClick": "echo NHDBT_SendRawCommand($id, $RawCommand);"
+            }
+          ]
         }
       ]
+    },
+    {
+      "type": "TestCenter"
     }
   ],
   "status": [
-    { "code": 102, "icon": "active",   "caption": "Aktiv" },
-    { "code": 104, "icon": "inactive", "caption": "Inaktiv" },
-    { "code": 200, "icon": "error",    "caption": "Keine IP-Adresse konfiguriert" },
-    { "code": 201, "icon": "error",    "caption": "Kommunikationsfehler" }
+    {
+      "code": 102,
+      "icon": "active",
+      "caption": "Aktiv"
+    },
+    {
+      "code": 104,
+      "icon": "inactive",
+      "caption": "Inaktiv"
+    },
+    {
+      "code": 200,
+      "icon": "error",
+      "caption": "Keine IP-Adresse konfiguriert"
+    },
+    {
+      "code": 201,
+      "icon": "error",
+      "caption": "Kommunikationsfehler"
+    }
   ]
 }

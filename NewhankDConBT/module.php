@@ -77,6 +77,9 @@ class NewhankDConBT extends IPSModule
         $this->EnsureProfiles();
 
         // ── Variables ───────────────────────────────────────────
+        // Erreichbarkeit
+        $this->RegisterVariableBoolean('Online', 'Online', $this->GetProfileName('Online'), 5);
+
         // Transport Controls
         $this->RegisterVariableInteger('Transport', 'Transport', $this->GetProfileName('Transport'), 10);
         $this->EnableAction('Transport');
@@ -112,9 +115,13 @@ class NewhankDConBT extends IPSModule
     {
         parent::ApplyChanges();
 
+        // Destroy() läuft auch bei jedem Modul-Update und löscht die Instanzprofile
+        $this->EnsureProfiles();
+
         $host = trim($this->ReadPropertyString('Host'));
 
         if ($host === '') {
+            $this->SetValueIfChanged('Online', false);
             $this->SetStatus(self::STATUS_NO_HOST);
             $this->SetTimerInterval('PollTimer', 0);
             return;
@@ -154,7 +161,7 @@ class NewhankDConBT extends IPSModule
 
         $resp = $this->SendUDP(self::OP_GET, self::CMD_ALL);
         if ($resp === false) {
-            $this->SetStatus(self::STATUS_COMM_ERROR);
+            $this->SetDeviceStatus(self::STATUS_COMM_ERROR);
             return;
         }
 
@@ -166,7 +173,7 @@ class NewhankDConBT extends IPSModule
             }
         }
 
-        $this->SetStatus(self::STATUS_OK);
+        $this->SetDeviceStatus(self::STATUS_OK);
     }
 
     /**
@@ -451,6 +458,19 @@ class NewhankDConBT extends IPSModule
         $this->SetValue($ident, $value);
     }
 
+    /**
+     * Instanzstatus und Online-Variable gemeinsam setzen (nur aus dem Poll-Pfad).
+     */
+    private function SetDeviceStatus(int $status): void
+    {
+        $online = ($status === self::STATUS_OK);
+        $this->SetValueIfChanged('Online', $online);
+        if (!$online && $this->GetStatus() !== $status) {
+            $this->LogMessage('DConBT ' . $this->ReadPropertyString('Host') . ' nicht erreichbar', KL_WARNING);
+        }
+        $this->SetStatus($status);
+    }
+
     private function GetProfileName(string $suffix): string
     {
         return 'NHDBT.' . $this->InstanceID . '.' . $suffix;
@@ -458,6 +478,14 @@ class NewhankDConBT extends IPSModule
 
     private function EnsureProfiles(): void
     {
+        $pOnline = $this->GetProfileName('Online');
+        if (!IPS_VariableProfileExists($pOnline)) {
+            IPS_CreateVariableProfile($pOnline, VARIABLETYPE_BOOLEAN);
+            IPS_SetVariableProfileAssociation($pOnline, false, 'Offline', 'Close', 0xFF0000);
+            IPS_SetVariableProfileAssociation($pOnline, true,  'Online',  'Ok',    0x00CC00);
+            IPS_SetVariableProfileIcon($pOnline, 'Network');
+        }
+
         $pTransport = $this->GetProfileName('Transport');
         if (!IPS_VariableProfileExists($pTransport)) {
             IPS_CreateVariableProfile($pTransport, VARIABLETYPE_INTEGER);
